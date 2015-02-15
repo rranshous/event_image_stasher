@@ -3,6 +3,8 @@ require 'sequel'
 require 'base64'
 require 'json'
 
+$stdout.sync = true
+
 CONNSTRING = ARGV.shift || 'http://0.0.0.0:2113'
 WRITE_DIR = ARGV.shift || './data'
 
