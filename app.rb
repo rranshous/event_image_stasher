@@ -20,7 +20,7 @@ loop do
   events = eventstore.resume_read('new-images', start_at, 100)
   events.each do |event|
     href = event[:body]["href"]
-    filename = Base64.encode64(href)
+    filename = Base64.urlsafe_encode64(href)
     out_path = File.join WRITE_DIR, filename
     puts "CHECKING: #{href}"
     if File.exists? out_path
