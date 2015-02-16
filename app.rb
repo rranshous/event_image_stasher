@@ -5,10 +5,10 @@ require 'json'
 
 $stdout.sync = true
 
-CONNSTRING = ARGV.shift || 'http://0.0.0.0:2113'
-WRITE_DIR = ARGV.shift || './data'
+CONNSTRING = ENV['EVENTSTORE_URL'] || 'http://0.0.0.0:2113'
+WRITE_DIR = ENV['WRITE_DIR'] || './data'
 
-database_url = ENV['DATABASE_URL'] || "sqlite://dev.db"
+database_url = ENV['DATABASE_URL'] || "sqlite://#{File.join(WRITE_DIR,'images.db')}"
 DB = Sequel.connect(database_url, :encoding => 'utf-8')
 
 begin
