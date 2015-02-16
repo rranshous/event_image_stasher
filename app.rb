@@ -5,6 +5,7 @@ $stdout.sync = true
 
 CONNSTRING = ENV['EVENTSTORE_URL'] || 'http://0.0.0.0:2113'
 WRITE_DIR = ENV['WRITE_DIR'] || './data'
+eventstore = EventStore::Client.new(CONNSTRING)
 
 SLEEP_TIME = 10
 start_at = 0
@@ -15,7 +16,6 @@ loop do
     sleep SLEEP_TIME
   end
   last_start_at = start_at
-  eventstore = EventStore::Client.new(CONNSTRING)
   puts "START_AT: #{start_at}"
   events = eventstore.resume_read('new-images', start_at, 100)
   events.each do |event|
@@ -32,6 +32,7 @@ loop do
       puts "WRITING: #{out_path}"
       File.write(out_path, image_data)
       puts "SAVED #{href} :: #{out_path}"
+      eventstore.write_event('images', 'downloaded', { href: href })
     end
     start_at = event[:id]
   end
