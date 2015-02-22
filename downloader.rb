@@ -10,8 +10,8 @@ eventstore = EventStore::Client.new(CONNSTRING)
 SLEEP_TIME = 10
 start_at = 0
 last_start_at = nil
-begin
-  loop do
+loop do
+  begin
     if last_start_at == start_at
       puts "SLEEPING: #{SLEEP_TIME}"
       sleep SLEEP_TIME
@@ -37,8 +37,8 @@ begin
       end
       start_at = event[:id]
     end
+  rescue => ex
+    puts "EXCEPTION [retrying]: #{ex}"
+    retry
   end
-rescue => ex
-  puts "EXCEPTION: #{ex}"
-  raise
 end
