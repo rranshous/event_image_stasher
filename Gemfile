@@ -5,3 +5,5 @@ gem 'eventstore', '~> 0.1'
 gem 'pry', group: :development
 
 gem 'sinatra'
+gem 'httmultiparty'
+gem 'streamworker', '~> 0.0.1', git: 'https://github.com/rranshous/streamworker.git'
