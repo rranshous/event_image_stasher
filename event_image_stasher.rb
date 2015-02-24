@@ -20,21 +20,24 @@ get '/links' do
     .map{|n| "<a href='/#{n}'>#{n}</a><br/>" }
 end
 
+head '/:image_name_encoded' do |image_name_encoded|
+  file_path = File.join WRITE_DIR, image_name_encoded
+  halt 404 if File.exists? file_path
+  halt 200
+end
+
 get '/:image_name_encoded' do |image_name_encoded|
   file_path = File.join WRITE_DIR, image_name_encoded
   halt 404 unless File.exists? file_path
   mime_type = `file --mime-type #{file_path} | cut -d' ' -f2`
   type = mime_type.split('/').last.chomp.to_sym
   content_type type
-  halt 404 unless File.exists? file_path
   File.read(file_path)
 end
 
 post '/:image_name_encoded' do |image_name_encoded|
   file_path = File.join WRITE_DIR, image_name_encoded
   puts "FILEPATH: #{file_path}"
-  require 'pry'
-  binding.pry
   File.write file_path, params['data'][:tempfile].read
   puts "WROTE: #{file_path}"
   content_type :text

@@ -9,11 +9,11 @@ class ImageStasher
 
   def self.get_data image_href
     image_href_encoded = encode image_href
-    HTTParty.get("#{host}/#{image_href_encoded}").parsed_response
+    self.get("#{host}/#{image_href_encoded}").parsed_response
   end
 
   def self.get_data_by_key image_href_encoded
-    HTTParty.get("#{host}/#{image_href_encoded}").parsed_response
+    self.get("#{host}/#{image_href_encoded}").parsed_response
   end
 
   def self.set_data image_href, image_data
@@ -27,6 +27,12 @@ class ImageStasher
 
   def self.list
     self.get("#{host}/").parsed_response
+  end
+
+  def self.exists? image_href
+    image_href_encoded = encode image_href
+    rsp = self.head("#{host}/#{image_href_encoded}")
+    return rsp.code == 200
   end
 
   private
