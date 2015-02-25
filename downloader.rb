@@ -1,31 +1,30 @@
 require 'streamworker'
 require_relative 'image_stasher'
 
+name 'image-downloader'
 handle 'new-images' do |state, event|
 
   href = event[:body]["href"]
+  log "href: #{href}"
 
   if href.nil? || href.chomp.length == 0
-    puts "NO HREF"
+    log "no href, skipping"
     next
   end
 
-  puts "CHECKING: #{href}"
-
   if ImageStasher.exists? href
-    puts "FOUND IMAGE: #{href}"
+    log "exists, skipping #{href}"
 
   else
-    puts "DOWNLOADING: #{href}"
     response = HTTParty.get(href)
     if response.code != 200
-      puts "BAD IMAGE DOWNLOAD: #{response}"
+      log "bad download: #{response}"
       next
     end
     image_data = response.parsed_response
-    puts "WRITING: #{image_data.length}"
-    ImageStasher.set_data href, image_data
-    puts "SAVED #{href} #{image_data.length}"
+    log "posting to stash: #{image_data.length}"
+    rsp = ImageStasher.set_data href, image_data
+    log "successful post #{rsp}"
     emit 'images', 'downloaded', { href: href, bytesize: image_data.length }
   end
 end

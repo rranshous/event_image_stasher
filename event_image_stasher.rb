@@ -22,7 +22,7 @@ end
 
 head '/:image_name_encoded' do |image_name_encoded|
   file_path = File.join WRITE_DIR, image_name_encoded
-  halt 404 if File.exists? file_path
+  halt 404 unless File.exists? file_path
   halt 200
 end
 
