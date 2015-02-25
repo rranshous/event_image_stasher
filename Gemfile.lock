@@ -74,4 +74,4 @@ DEPENDENCIES
   httmultiparty
   pry
   sinatra
-  streamworker (~> 0.0.1)!
+  streamworker (~> 0.0)!

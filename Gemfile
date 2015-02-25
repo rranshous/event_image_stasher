@@ -6,4 +6,4 @@ gem 'pry', group: :development
 
 gem 'sinatra'
 gem 'httmultiparty'
-gem 'streamworker', '~> 0.0.1', git: 'https://github.com/rranshous/streamworker.git'
+gem 'streamworker', '~> 0.0', git: 'https://github.com/rranshous/streamworker.git'
